@@ -10,13 +10,15 @@
    <top>
       <AnchorPane BorderPane.alignment="TOP_RIGHT">
          <BorderPane.margin>
-            <Insets right="5.0" top="5.0"/>
+            <Insets right="5.0" top="5.0" />
          </BorderPane.margin>
-         <Canvas height="32.0" width="32.0" fx:id="xCanvas"/>
+         <Canvas fx:id="xCanvas" />
       </AnchorPane>
    </top>
    <bottom>
-      <AnchorPane BorderPane.alignment="CENTER" />
+      <AnchorPane BorderPane.alignment="CENTER">
+         <Canvas fx:id="settingsCanvas"/>
+      </AnchorPane>
    </bottom>
    <center>
       <Label fx:id="clockLabel" alignment="CENTER" contentDisplay="CENTER" BorderPane.alignment="CENTER">
