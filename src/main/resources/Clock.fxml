@@ -8,32 +8,21 @@
 
 <BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.clockfx.Controllers.ClockController">
    <top>
-      <AnchorPane fx:id="topAnchor" BorderPane.alignment="TOP_RIGHT">
+      <AnchorPane BorderPane.alignment="TOP_RIGHT">
          <BorderPane.margin>
-            <Insets right="5.0" top="5.0" />
+            <Insets right="5.0" top="5.0"/>
          </BorderPane.margin>
-         <children>
-            <Canvas height="32.0" width="32.0" fx:id="xCanvas" />
-         </children>
+         <Canvas height="32.0" width="32.0" fx:id="xCanvas"/>
       </AnchorPane>
    </top>
    <bottom>
-      <AnchorPane fx:id="bottomAnchor" BorderPane.alignment="CENTER" />
+      <AnchorPane BorderPane.alignment="CENTER" />
    </bottom>
    <center>
-      <AnchorPane fx:id="inner" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label fx:id="clockLabel" alignment="CENTER" contentDisplay="CENTER">
-               <font>
-                  <Font size="81.0" />
-               </font>
-            </Label>
-            <Label fx:id="quoteLabel" alignment="CENTER" contentDisplay="CENTER">
-               <font>
-                  <Font size="81.0" />
-               </font>
-            </Label>
-         </children>
-      </AnchorPane>
+      <Label fx:id="clockLabel" alignment="CENTER" contentDisplay="CENTER" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="81.0" />
+         </font>
+      </Label>
    </center>
 </BorderPane>

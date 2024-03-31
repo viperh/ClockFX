@@ -26,9 +26,9 @@ public class ClockController {
 
     @FXML private Label clockLabel;
 
-    @FXML private Label quoteLabel;
 
-    @FXML private AnchorPane inner;
+
+
 
 
 
@@ -38,36 +38,28 @@ public class ClockController {
         setMainPaneDesign();
         setLayoutAndLogic();
         setDesign();
+        Platform.runLater(this::setComponentsSize);
     }
 
-    public void setComponentsSize(String quote){
+    public void setComponentsSize(){
         Rectangle2D screenSize = Screen.getPrimary().getBounds();
         int width =  (int) screenSize.getWidth();
-        int height = (int) screenSize.getHeight();
-
         int maxLabelWidth = width * 8 / 10;
-        int maxLabelHeight = height * 8 / 10;
         Text clockText = new Text("00:00:00");
-        Text quoteText = new Text(quote);
-        clockText.setFont(new Font("Arial",30));
-        quoteText.setFont(new Font("Arial", 10));
-
-        while((clockText.getLayoutBounds().getWidth() < maxLabelWidth) && (clockText.getLayoutBounds().getHeight() + quoteText.getLayoutBounds().getHeight() < maxLabelHeight)){
+        clockText.setFont(new Font("Arial",50));
+        while(clockText.getLayoutBounds().getWidth() < maxLabelWidth){
             clockText.setFont(new Font(clockText.getFont().getSize() + 1));
-            quoteText.setFont(new Font(quoteText.getFont().getSize() + 1));
         }
+
+        clockLabel.setFont(clockText.getFont());
 
 
     }
 
-    public void updateComponents(String quote){
+    public void updateComponents(){
         Platform.runLater(() -> {
             String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
             clockLabel.setText(time);
-            if (clockLabel.getText().split(":")[2].equals("00") && quote != null){
-                quoteLabel.setText(quote);
-                setComponentsSize(quote);
-            }
         });
     }
 
@@ -82,18 +74,11 @@ public class ClockController {
         AnchorPane.setTopAnchor(xCanvas, 5.0);
         AnchorPane.setRightAnchor(xCanvas, 5.0);
         // clockLabel
-        AnchorPane.setTopAnchor(clockLabel, 10.0);
+        AnchorPane.setTopAnchor(clockLabel, 0.0);
         AnchorPane.setBottomAnchor(clockLabel, 0.0);
         AnchorPane.setLeftAnchor(clockLabel, 0.0);
         AnchorPane.setRightAnchor(clockLabel, 0.0);
-        // quoteLabel
-        AnchorPane.setTopAnchor(quoteLabel, 0.0);
-        AnchorPane.setBottomAnchor(quoteLabel, 10.0);
-        AnchorPane.setLeftAnchor(quoteLabel, 0.0);
-        AnchorPane.setRightAnchor(quoteLabel, 0.0);
 
-
-        inner.setBackground(TBackground.getBg(Color.TRANSPARENT));
         xCanvas.setOnMouseClicked(this::handleXEvent);
 
     }
@@ -102,10 +87,6 @@ public class ClockController {
         clockLabel.setTextFill(Color.WHITE);
         clockLabel.setFont(new Font("Arial", 50));
         clockLabel.setBackground(TBackground.getBg(Color.TRANSPARENT));
-
-        quoteLabel.setTextFill(Color.WHITE);
-        quoteLabel.setFont(new Font("Arial", 50));
-        quoteLabel.setBackground(TBackground.getBg(Color.TRANSPARENT));
 
     }
 

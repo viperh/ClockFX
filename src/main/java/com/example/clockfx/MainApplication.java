@@ -5,7 +5,6 @@ import com.example.clockfx.Controllers.ClockController;
 import com.example.clockfx.Utils.CFXMLLoader;
 import com.example.clockfx.Utils.StageBuilder;
 import com.example.clockfx.Utils.UpdateComponents;
-import com.example.clockfx.WebScraper.QuotesScraper;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -17,13 +16,12 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Timer;
 
 @SuppressWarnings("unused")
 public class MainApplication extends Application {
     @Override
-    public void start(Stage mainStage) throws IOException, InterruptedException {
+    public void start(Stage mainStage) throws IOException {
 
         FXMLLoader fxmlLoader = CFXMLLoader.getFXMLLoader("Clock");
 
@@ -42,20 +40,10 @@ public class MainApplication extends Application {
                 .setIcon("icons/taskIcon.png");
 
 
-        QuotesScraper scraper = QuotesScraper.createNew();
-        scraper.run();
-        scraper.printFetchedQuotes();
 
-        List<String> quotes = scraper.getQuotes();
-        if (quotes.isEmpty()){
-            quotes = null;
-        }
 
         Timer timer = new Timer();
-        timer.schedule(new UpdateComponents(clockController, quotes), 0, 10);
-
-
-
+        timer.schedule(new UpdateComponents(clockController), 0, 10);
 
         mainBuilder.showStage();
 
