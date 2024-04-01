@@ -6,7 +6,6 @@ module com.example.clockfx {
     requires javafx.fxml;
     requires java.desktop;
     requires java.base;
-    requires org.jsoup;
 
 
 

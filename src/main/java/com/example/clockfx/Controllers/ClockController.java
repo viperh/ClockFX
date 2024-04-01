@@ -1,12 +1,17 @@
 package com.example.clockfx.Controllers;
 
 import com.example.clockfx.Components.TBackground;
+import com.example.clockfx.Utils.CFXMLLoader;
+import com.example.clockfx.Utils.StageBuilder;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
@@ -18,8 +23,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -43,14 +50,41 @@ public class ClockController {
 
     private boolean autoRun = false;
 
+    private boolean settingsVisible = false;
+
+    StageBuilder subSceneBuilder;
+
     @FXML
-    public void initialize(){
+    public void initialize() throws IOException {
         setDesign();
         drawX();
         drawSettingsIcon();
         setMainPaneDesign();
         setLayoutAndLogic();
         Platform.runLater(this::setComponentsSize);
+        createSubScene();
+    }
+
+    private void createSubScene() throws IOException {
+        FXMLLoader loader = CFXMLLoader.getFXMLLoader("Settings");
+        Parent parent = loader.load();
+        Rectangle2D screenSize = Screen.getPrimary().getBounds();
+
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        double settingsWidth = width * 0.8;
+        double settingsHeight = height * 0.8;
+
+        double settingsX = (width - settingsWidth) / 2;
+        double settingsY = (height - settingsHeight) / 2;
+
+
+        subSceneBuilder = StageBuilder.newBuilder()
+                .withScene(new Scene(parent,settingsWidth, settingsHeight, Color.BLACK))
+                .setMaxWidthAndHeight(settingsWidth, settingsHeight)
+                .removeUpperBar()
+                .setIcon("icons/taskIcon.png")
+                .setPosition(settingsX, settingsY);
     }
 
     public void setComponentsSize(){
@@ -76,7 +110,7 @@ public class ClockController {
     }
 
     public void setMainPaneDesign(){
-        mainPane.setBackground(TBackground.getBg(Color.BLACK));
+        mainPane.setBackground(TBackground.getBg(bgColor));
     }
 
     public void setLayoutAndLogic(){
@@ -99,6 +133,14 @@ public class ClockController {
         settingsCanvas.setOnMouseClicked(event -> {
            if (event.getButton() == MouseButton.SECONDARY){
                autoRun = !autoRun;
+           }
+           if (event.getButton() == MouseButton.PRIMARY){
+               try {
+                   handleSettingsClicked();
+               }catch (IOException e){
+                   e.printStackTrace();
+                   System.exit(0);
+               }
            }
         });
     }
@@ -154,6 +196,9 @@ public class ClockController {
         gc.strokeLine(0, 0, width, height);
         gc.strokeLine(0, width, height, 0);
     }
+
+
+
 
     private void drawSettingsIcon(){
 
@@ -225,6 +270,23 @@ public class ClockController {
 
     private void handleXEvent(MouseEvent event){
         System.exit(0);
+    }
+
+
+    private void handleSettingsClicked() throws IOException {
+
+        if (!settingsVisible){
+            Stage mainStage = (Stage) mainPane.getScene().getWindow();
+            if (mainStage.isFullScreen()){
+                mainStage.setFullScreen(false);
+            }
+            subSceneBuilder.showStage();
+        }
+
+        else{
+            subSceneBuilder.closeStage();
+        }
+        settingsVisible = !settingsVisible;
     }
 
 

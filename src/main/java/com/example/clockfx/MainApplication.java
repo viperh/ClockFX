@@ -36,8 +36,11 @@ public class MainApplication extends Application {
                 .withScene(new Scene(parent,width, height, Color.BLACK))
                 .setMaxWidthAndHeight(width, height)
                 .setFullscreen(true)
+                .setFullScreenHint("Press f to change fullscreen state!")
+                .seExitFullScreenKey("f")
                 .removeUpperBar()
                 .setIcon("icons/taskIcon.png");
+
 
 
 
@@ -46,8 +49,6 @@ public class MainApplication extends Application {
         timer.schedule(new UpdateComponents(clockController), 0, 10);
 
         mainBuilder.showStage();
-
-
 
     }
 

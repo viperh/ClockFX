@@ -2,6 +2,7 @@ package com.example.clockfx.Utils;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -9,8 +10,8 @@ public class StageBuilder{
 
     private final Group root;
 
+    private final Stage stage;
     private final Scene scene;
-    private Stage stage;
 
     private StageBuilder(){
         this.root = new Group();
@@ -41,17 +42,32 @@ public class StageBuilder{
         this.stage.setFullScreen(isFullscreen);
         return this;
     }
+    public StageBuilder setFullScreenHint(String hint){
+        this.stage.setFullScreenExitHint(hint);
+        return this;
+    }
+    public StageBuilder seExitFullScreenKey(String combination){
+        this.stage.setFullScreenExitKeyCombination(KeyCombination.keyCombination(combination));
+        return this;
+    }
 
     public StageBuilder removeUpperBar(){
         this.stage.initStyle(StageStyle.UNDECORATED);
         return this;
     }
 
-    public StageBuilder showStage(){
-        this.stage.show();
+    public StageBuilder setPosition(double x, double y){
+        this.stage.setX(x);
+        this.stage.setY(y);
         return this;
     }
 
+    public void showStage(){
+        this.stage.show();
+    }
 
 
+    public void closeStage() {
+        this.stage.close();
+    }
 }
