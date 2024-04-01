@@ -17,7 +17,7 @@
    </top>
    <bottom>
       <AnchorPane BorderPane.alignment="CENTER">
-         <Canvas fx:id="settingsCanvas"/>
+         <Canvas fx:id="settingsCanvas" />
       </AnchorPane>
    </bottom>
    <center>

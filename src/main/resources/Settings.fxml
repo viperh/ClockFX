@@ -1,28 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.clockfx.Controllers.SettingsController">
+<BorderPane fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.clockfx.Controllers.SettingsController">
    <center>
-       <GridPane fx:id="grid" alignment="CENTER" BorderPane.alignment="CENTER">
-           <columnConstraints>
-               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-           </columnConstraints>
-           <rowConstraints>
-               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-           </rowConstraints>
-           <opaqueInsets>
-               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-           </opaqueInsets>
-           <padding>
-               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-           </padding>
-           <Label/>
-       </GridPane>
+      <GridPane fx:id="grid" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label fx:id="generalColorLabel" alignment="CENTER" contentDisplay="CENTER" text="General Color" textAlignment="CENTER" textFill="RED" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <font>
+                  <Font name="Consolas" size="25.0" />
+               </font>
+            </Label>
+            <Label fx:id="clockColorLabel" alignment="CENTER" contentDisplay="CENTER" text="Clock Color" textAlignment="CENTER" textFill="RED" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <font>
+                  <Font name="Consolas" size="25.0" />
+               </font>
+            </Label>
+            <Label fx:id="controlsColorLabel" alignment="CENTER" contentDisplay="CENTER" text="Controls Color" textAlignment="CENTER" textFill="RED" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="25.0" />
+               </font></Label>
+            <Label fx:id="bgColorLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="80.0" layoutY="136.0" text="Background Color" textAlignment="CENTER" textFill="RED" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label fx:id="hideControlsLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="60.0" layoutY="193.0" text="Hide Controls" textAlignment="CENTER" textFill="RED" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <ColorPicker fx:id="generalColor" promptText="Hello" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <value>
+                  <Color red="1.0" />
+               </value>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></ColorPicker>
+            <ColorPicker fx:id="clockColor" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <value>
+                  <Color red="1.0" />
+               </value>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></ColorPicker>
+            <ColorPicker fx:id="controlsColor" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <value>
+                  <Color red="1.0" />
+               </value>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></ColorPicker>
+            <ColorPicker fx:id="bgColor" layoutX="398.0" layoutY="140.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+               <value>
+                  <Color />
+               </value>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ColorPicker>
+            <ChoiceBox fx:id="hideControls" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
    </center>
+   <top>
+      <AnchorPane fx:id="canvasPane" BorderPane.alignment="CENTER">
+         <children>
+            <Canvas fx:id="xCanvas" />
+         </children>
+      </AnchorPane>
+   </top>
 </BorderPane>

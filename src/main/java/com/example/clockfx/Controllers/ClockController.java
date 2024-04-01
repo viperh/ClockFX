@@ -2,6 +2,8 @@ package com.example.clockfx.Controllers;
 
 import com.example.clockfx.Components.TBackground;
 import com.example.clockfx.Utils.CFXMLLoader;
+import com.example.clockfx.Utils.ConfigUtils;
+import com.example.clockfx.Utils.Settings;
 import com.example.clockfx.Utils.StageBuilder;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+@SuppressWarnings("all")
 public class ClockController {
 
     @FXML private BorderPane mainPane;
@@ -42,20 +45,14 @@ public class ClockController {
 
 
     private double settingsAngle = 0;
-
-    Color bgColor = Color.BLACK;
-    Color controlsColor = Color.RED;
-
     private Timeline timeline;
-
     private boolean autoRun = false;
 
-    private boolean settingsVisible = false;
-
-    StageBuilder subSceneBuilder;
+    StageBuilder stageBuilder;
 
     @FXML
     public void initialize() throws IOException {
+        ConfigUtils.loadConfig();
         setDesign();
         drawX();
         drawSettingsIcon();
@@ -79,8 +76,9 @@ public class ClockController {
         double settingsY = (height - settingsHeight) / 2;
 
 
-        subSceneBuilder = StageBuilder.newBuilder()
-                .withScene(new Scene(parent,settingsWidth, settingsHeight, Color.BLACK))
+
+        stageBuilder = StageBuilder.newBuilder()
+                .withScene(new Scene(parent,settingsWidth, settingsHeight))
                 .setMaxWidthAndHeight(settingsWidth, settingsHeight)
                 .removeUpperBar()
                 .setIcon("icons/taskIcon.png")
@@ -96,9 +94,7 @@ public class ClockController {
         while(clockText.getLayoutBounds().getWidth() < maxLabelWidth){
             clockText.setFont(new Font(clockText.getFont().getSize() + 1));
         }
-
         clockLabel.setFont(clockText.getFont());
-
 
     }
 
@@ -110,10 +106,11 @@ public class ClockController {
     }
 
     public void setMainPaneDesign(){
-        mainPane.setBackground(TBackground.getBg(bgColor));
+        mainPane.setBackground(TBackground.getBg(Settings.getBgColor()));
     }
 
     public void setLayoutAndLogic(){
+
         // xCanvas
         AnchorPane.setTopAnchor(xCanvas, 5.0);
         AnchorPane.setRightAnchor(xCanvas, 5.0);
@@ -166,8 +163,9 @@ public class ClockController {
     }
 
     public void setDesign() {
-        setClockColor(Color.WHITE);
+        setClockColor(Settings.getClockColor());
         clockLabel.setFont(new Font("Arial", 50));
+
         clockLabel.setBackground(TBackground.getBg(Color.TRANSPARENT));
 
         double elementsWidth = 35;
@@ -185,87 +183,92 @@ public class ClockController {
     }
 
     private void drawX(){
-        GraphicsContext gc = xCanvas.getGraphicsContext2D();
 
-        gc.setStroke(controlsColor);
-        gc.setLineWidth(4);
+        if(!Settings.areControlsHidden()){
+            GraphicsContext gc = xCanvas.getGraphicsContext2D();
+            gc.setStroke(Settings.getControlsColor());
+            gc.setLineWidth(4);
+            double width = gc.getCanvas().getWidth();
+            double height = gc.getCanvas().getHeight();
 
-        double width = gc.getCanvas().getWidth();
-        double height = gc.getCanvas().getHeight();
+            gc.strokeLine(0, 0, width, height);
+            gc.strokeLine(0, width, height, 0);
+        }
 
-        gc.strokeLine(0, 0, width, height);
-        gc.strokeLine(0, width, height, 0);
+
     }
 
 
 
 
     private void drawSettingsIcon(){
+        if (!Settings.areControlsHidden()){
+
+            GraphicsContext gc = settingsCanvas.getGraphicsContext2D();
 
 
-        GraphicsContext gc = settingsCanvas.getGraphicsContext2D();
+            double width = gc.getCanvas().getWidth();
+            double height = gc.getCanvas().getHeight();
 
 
-        double width = gc.getCanvas().getWidth();
-        double height = gc.getCanvas().getHeight();
+            double centerX = width / 2;
+            double centerY = height / 2;
+            double radius = width / 4;
+
+            int teethCount = 8;
+            double toothWidth = Math.PI * 2 / teethCount * 0.4;
+            double toothHeight = (radius / 3) + 4;
 
 
-        double centerX = width / 2;
-        double centerY = height / 2;
-        double radius = width / 4;
-
-        int teethCount = 8;
-        double toothWidth = Math.PI * 2 / teethCount * 0.4;
-        double toothHeight = (radius / 3) + 4;
-
-
-        gc.clearRect(0,0, width, height);
-        gc.save();
+            gc.clearRect(0,0, width, height);
+            gc.save();
 
 
 
 
 
-        gc.setFill(controlsColor);
-        gc.setStroke(controlsColor);
-        gc.setLineWidth(4);
+            gc.setFill(Settings.getControlsColor());
+            gc.setStroke(Settings.getControlsColor());
+            gc.setLineWidth(4);
 
-        gc.beginPath();
-        for (int i = 0; i < teethCount; i++) {
-            double angle = i * 2 * Math.PI / teethCount + settingsAngle;
-            double x1 = centerX + Math.cos(angle) * radius;
-            double y1 = centerY + Math.sin(angle) * radius;
-            double x2 = centerX + Math.cos(angle + toothWidth) * radius;
-            double y2 = centerY + Math.sin(angle + toothWidth) * radius;
-            double x3 = centerX + Math.cos(angle + toothWidth) * (radius + toothHeight);
-            double y3 = centerY + Math.sin(angle + toothWidth) * (radius + toothHeight);
-            double x4 = centerX + Math.cos(angle) * (radius + toothHeight);
-            double y4 = centerY + Math.sin(angle) * (radius + toothHeight);
-            gc.moveTo(x1, y1);
-            gc.lineTo(x2, y2);
-            gc.lineTo(x3, y3);
-            gc.lineTo(x4, y4);
-            gc.closePath();
-            gc.stroke();
+            gc.beginPath();
+            for (int i = 0; i < teethCount; i++) {
+                double angle = i * 2 * Math.PI / teethCount + settingsAngle;
+                double x1 = centerX + Math.cos(angle) * radius;
+                double y1 = centerY + Math.sin(angle) * radius;
+                double x2 = centerX + Math.cos(angle + toothWidth) * radius;
+                double y2 = centerY + Math.sin(angle + toothWidth) * radius;
+                double x3 = centerX + Math.cos(angle + toothWidth) * (radius + toothHeight);
+                double y3 = centerY + Math.sin(angle + toothWidth) * (radius + toothHeight);
+                double x4 = centerX + Math.cos(angle) * (radius + toothHeight);
+                double y4 = centerY + Math.sin(angle) * (radius + toothHeight);
+                gc.moveTo(x1, y1);
+                gc.lineTo(x2, y2);
+                gc.lineTo(x3, y3);
+                gc.lineTo(x4, y4);
+                gc.closePath();
+                gc.stroke();
+            }
+
+            // Draw the circle at the center
+
+            double overlappingRadius = radius + gc.getLineWidth();
+            gc.setFill(Settings.getBgColor());
+            gc.fillOval(centerX - overlappingRadius, centerY - overlappingRadius, overlappingRadius * 2, overlappingRadius * 2);
+
+
+            double middleCircleRadius = overlappingRadius * 0.6;
+            double smallCircleRadius = overlappingRadius * 0.4;
+            gc.setFill(Settings.getControlsColor());
+            gc.fillOval(centerX - middleCircleRadius, centerY - middleCircleRadius, middleCircleRadius * 2, middleCircleRadius * 2);
+            gc.setFill(Settings.getControlsColor());
+            gc.fillOval(centerX - smallCircleRadius, centerY - smallCircleRadius, smallCircleRadius * 2, smallCircleRadius * 2);
+
+
+
+            gc.restore();
         }
 
-        // Draw the circle at the center
-
-        double overlappingRadius = radius + gc.getLineWidth();
-        gc.setFill(bgColor);
-        gc.fillOval(centerX - overlappingRadius, centerY - overlappingRadius, overlappingRadius * 2, overlappingRadius * 2);
-
-
-        double middleCircleRadius = overlappingRadius * 0.6;
-        double smallCircleRadius = overlappingRadius * 0.4;
-        gc.setFill(controlsColor);
-        gc.fillOval(centerX - middleCircleRadius, centerY - middleCircleRadius, middleCircleRadius * 2, middleCircleRadius * 2);
-        gc.setFill(Color.BLACK);
-        gc.fillOval(centerX - smallCircleRadius, centerY - smallCircleRadius, smallCircleRadius * 2, smallCircleRadius * 2);
-
-
-
-        gc.restore();
     }
 
     private void handleXEvent(MouseEvent event){
@@ -275,18 +278,16 @@ public class ClockController {
 
     private void handleSettingsClicked() throws IOException {
 
-        if (!settingsVisible){
-            Stage mainStage = (Stage) mainPane.getScene().getWindow();
-            if (mainStage.isFullScreen()){
-                mainStage.setFullScreen(false);
-            }
-            subSceneBuilder.showStage();
-        }
 
-        else{
-            subSceneBuilder.closeStage();
+        Stage mainStage = (Stage) mainPane.getScene().getWindow();
+        if (mainStage.isFullScreen()){
+            mainStage.setFullScreen(false);
         }
-        settingsVisible = !settingsVisible;
+        mainStage.close();
+        stageBuilder.showStage();
+
+
+
     }
 
 

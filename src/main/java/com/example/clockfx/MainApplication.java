@@ -37,7 +37,7 @@ public class MainApplication extends Application {
                 .setMaxWidthAndHeight(width, height)
                 .setFullscreen(true)
                 .setFullScreenHint("Press f to change fullscreen state!")
-                .seExitFullScreenKey("f")
+                .setExitFullScreenKey("f")
                 .removeUpperBar()
                 .setIcon("icons/taskIcon.png");
 
