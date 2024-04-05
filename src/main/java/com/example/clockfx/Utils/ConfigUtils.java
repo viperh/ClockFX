@@ -97,6 +97,7 @@ public abstract class ConfigUtils {
                 if (line.isEmpty()){
                     continue;
                 }
+
                 config.put(line.split(":")[0].trim(), line.split(":")[1].trim());
             }
 
